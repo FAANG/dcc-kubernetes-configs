@@ -7,10 +7,13 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 es = Elasticsearch(['elasticsearch-master-headless:9200'])
 
 
-@app.route("/organism")
+@app.route("/organism/<mode>")
 @cross_origin()
-def bovreg_organisms():
-    data = es.search(index='organism', size=10000)
+def bovreg_organisms(mode):
+    if mode == 'private':
+        data = es.search(index='organism', size=10000)
+    else:
+        data = es.search(index='organism', q="private:false", size=10000)
     return data
 
 
