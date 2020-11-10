@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-svc
+spec:
+  ports:
+  - port: 5672
+    protocol: TCP
+    targetPort: 5672
+  selector:
+    ms: rabbitmq-deployment
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rabbitmq-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        ms: rabbitmq-deployment
+    spec:
+      containers:
+      - name: rabbitmq-deployment
+        image: rabbitmq
+        ports:
+        - containerPort: 5672
