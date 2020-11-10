@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: validation-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        ms: validation
+    spec:
+      containers:
+      - name: validation
+        image: alexeyebi/validation
+        ports:
+        - containerPort: 80
