@@ -12,5 +12,11 @@ spec:
       containers:
       - name: celery-deployment
         image: alexeyebi/validation
-        ports:
-        - containerPort: 80
+        command: ['/bin/bash', 'run_celery.sh']
+        volumeMounts:
+          - name: data
+            mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: validation-pvc
