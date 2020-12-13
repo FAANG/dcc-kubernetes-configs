@@ -29,9 +29,24 @@ spec:
         command: ['/bin/bash', 'run_daphne.sh']
         ports:
         - containerPort: 8000
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: user
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: password
+          - name: POSTGRES_HOST
+            value: postgres-service
         volumeMounts:
           - name: data
             mountPath: /data
+      imagePullSecrets:
+        - name: regcred
       volumes:
         - name: data
           persistentVolumeClaim:

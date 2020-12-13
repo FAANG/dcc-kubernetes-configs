@@ -16,6 +16,8 @@ spec:
         volumeMounts:
           - name: data
             mountPath: /data
+      imagePullSecrets:
+        - name: regcred
       volumes:
         - name: data
           persistentVolumeClaim:
