@@ -44,16 +44,20 @@ kind: Ingress
 metadata:
   name: validation-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/add-base-url: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 100m
 spec:
+  tls:
+  - hosts:
+    - api.faang.org
+    secretName: tls-secret
   rules:
-  - host:
+  - host: api.faang.org
     http:
       paths:
-      - path: /validation(/|$)(.*)
+      - path: /
         backend:
           serviceName: daphne-svc
           servicePort: 8000
