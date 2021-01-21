@@ -1,0 +1,16 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-protocol
+spec:
+  schedule: "0 0 * * 1"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-protocol
+              image: aksh77/protocol-update-cronjob
+              imagePullPolicy: IfNotPresent
+              command: ["python", "update.py"]
+          restartPolicy: OnFailure
