@@ -10,7 +10,15 @@ spec:
         spec:
           containers:
             - name: update-protocol
-              image: aksh77/protocol-update-cronjob
-              imagePullPolicy: IfNotPresent
+              image: dockerhub.ebi.ac.uk/faang/dcc-kubernetes-configs/protocol-update-cronjob
               command: ["python", "update.py"]
+              volumeMounts:
+              - name: data
+                mountPath: /data
+          imagePullSecrets:
+            - name: regcred
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: cronjob-pvc
           restartPolicy: OnFailure

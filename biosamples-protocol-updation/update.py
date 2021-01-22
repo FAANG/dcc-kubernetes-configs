@@ -1,6 +1,7 @@
 import json
 import requests
 import csv
+from datetime import datetime
 
 endpoint = 'https://www.ebi.ac.uk/biosamples/samples'
 records = []
@@ -58,8 +59,11 @@ for record in records:
         data.append(rec)
 
 keys = data[0].keys()
-with open('records.csv', 'w', newline='')  as output_file:
+timestamp = datetime.now().strftime("%Y_%m_%d")
+filename = "records_" + timestamp + ".csv"
+with open(filename, 'w', newline='')  as output_file:
     dict_writer = csv.DictWriter(output_file, keys)
     dict_writer.writeheader()
     dict_writer.writerows(data)
 
+print(str(len(data)) + ' records found')
