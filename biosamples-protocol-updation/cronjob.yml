@@ -10,7 +10,8 @@ spec:
         spec:
           containers:
             - name: update-protocol
-              image: dockerhub.ebi.ac.uk/faang/dcc-kubernetes-configs/protocol-update-cronjob
+              image: dockerhub.ebi.ac.uk/faang/dcc-kubernetes-configs/protocol-update-cronjob:latest
+              imagePullPolicy: Always
               command: ["python", "update.py"]
               volumeMounts:
               - name: data

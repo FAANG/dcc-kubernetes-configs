@@ -58,12 +58,13 @@ for record in records:
         rec['new_protocol_link'] = new_protocols
         data.append(rec)
 
-keys = data[0].keys()
-timestamp = datetime.now().strftime("%Y_%m_%d")
-filename = "records_" + timestamp + ".csv"
-with open(filename, 'w', newline='')  as output_file:
-    dict_writer = csv.DictWriter(output_file, keys)
-    dict_writer.writeheader()
-    dict_writer.writerows(data)
+if len(data):
+    keys = data[0].keys()
+    timestamp = datetime.now().strftime("%Y_%m_%d")
+    filename = "records_" + timestamp + ".csv"
+    with open(filename, 'w', newline='')  as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(data)
 
 print(str(len(data)) + ' records found')
