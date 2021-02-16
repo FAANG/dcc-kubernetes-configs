@@ -1,0 +1,25 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-protocol
+spec:
+  schedule: "0 0 * * 1"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-protocol
+              image: dockerhub.ebi.ac.uk/faang/dcc-kubernetes-configs/protocol-update-cronjob:latest
+              imagePullPolicy: Always
+              command: ["python", "update.py"]
+              volumeMounts:
+              - name: data
+                mountPath: /data
+          imagePullSecrets:
+            - name: regcred
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: cronjob-pvc
+          restartPolicy: OnFailure
