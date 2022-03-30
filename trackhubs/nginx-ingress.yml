@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+    - host: api.faang.org
+      http:
+        paths:
+        - path: /trackhubs
+          backend:
+            serviceName: nginx-svc
+            servicePort: 80
