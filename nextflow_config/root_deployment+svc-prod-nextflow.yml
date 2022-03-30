@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: nginx-nf-deployment
   labels:
-    app: nginx
+    app: nginx-nf
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: nginx-nf
   template:
     metadata:
       labels:
-        app: nginx
+        app: nginx-nf
     spec:
       containers:
-      - name: nginx
+      - name: nginx-nf
         image: openresty/openresty
         ports:
         - containerPort: 80
@@ -44,7 +44,7 @@ spec:
   - port: 80
     name: http
   selector:
-    app: nginx
+    app: nginx-nf
 
 ---
 
@@ -145,5 +145,5 @@ spec:
         paths:
         - path: /nextflow_files_upload
           backend:
-            serviceName: nginx-svc
+            serviceName: nginx-nf-svc
             servicePort: 80
