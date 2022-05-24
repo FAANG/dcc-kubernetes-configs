@@ -9,7 +9,7 @@ spec:
     - host: api.faang.org
       http:
         paths:
-        - path: /trackhubs
+        - path: /files
           backend:
             serviceName: nginx-svc
             servicePort: 80

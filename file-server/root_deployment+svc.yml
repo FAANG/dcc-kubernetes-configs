@@ -28,7 +28,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: local-storage-pvc
+            claimName: local-storage-pvc-test
         - name: nginx-config
           configMap:
             name: nginx-configmap
@@ -67,10 +67,11 @@ data:
       # Set the 'age' to a value larger than the expected fill time
       proxy_cache_lock_age 200s;
       proxy_cache_use_stale updating;
+      client_max_body_size           500M;
       
       server_name api.faang.org;
       add_header Allow "GET, POST" always;
-      location /trackhubs {
+      location /files {
           root /usr/share/nginx/html;
           index index.html;
           autoindex on;
@@ -107,9 +108,9 @@ data:
           end
           filedata = string.gsub(data[2], '^(.-)\r\n$', '%1');
           file:close()
-          filepath = "/usr/share/nginx/html/trackhubs/" .. path .. "/" .. filename;
-          os.execute("cd /usr/share/nginx/html/trackhubs")
-          os.execute("mkdir -p /usr/share/nginx/html/trackhubs/" .. path)
+          filepath = "/usr/share/nginx/html/files/" .. path .. "/" .. filename;
+          os.execute("cd /usr/share/nginx/html/files")
+          os.execute("mkdir -p /usr/share/nginx/html/files/" .. path)
           local file, err = io.open(filepath, "wb");
           if file==nil then
               ngx.log(ngx.STDERR, "Couldn't open file: "..err)
@@ -121,14 +122,13 @@ data:
         }
       }
 
-      location /trackhubs_upload {
+      location /files_upload {
         proxy_read_timeout 300s;
         proxy_connect_timeout 300s;
         limit_except POST              { deny all; }
         client_body_temp_path          /tmp;
         client_body_in_file_only       on;
         client_body_buffer_size        128K;
-        client_max_body_size           500M;
         proxy_pass_request_headers     on;
         proxy_set_header content-type "text/html";
         proxy_set_header temploc       $request_body_file;
