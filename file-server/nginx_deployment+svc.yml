@@ -28,7 +28,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: local-storage-pvc-test
+            claimName: local-storage-pvc
         - name: nginx-config
           configMap:
             name: nginx-configmap
