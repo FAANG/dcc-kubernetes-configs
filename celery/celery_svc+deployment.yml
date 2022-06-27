@@ -18,6 +18,7 @@ spec:
       containers:
       - name: celery-deployment
         image: alexeyebi/validation
+        command: ['/bin/bash', 'run_celery.sh']
         env:
           - name: FIRE_USERNAME
             valueFrom:
@@ -69,8 +70,6 @@ spec:
               secretKeyRef:
                 name: minio-credentials
                 key: secret_key
-        command: ['/bin/bash', 'run_celery.sh']
-        env:
           - name: POSTGRES_USER
             valueFrom:
               secretKeyRef:
