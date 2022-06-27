@@ -28,6 +28,7 @@ spec:
     spec:
       containers:
       - name: elixir-jsonschema-validator-deployment
-        image: alexeyebi/elixir-jsonschema-validator
+        image: quay.io/ebi-ait/biovalidator:1.0.0
+        args: ["--server"]
         ports:
         - containerPort: 3020

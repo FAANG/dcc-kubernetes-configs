@@ -1,16 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: test-ingress
+  name: elasticsearch-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
 spec:
   rules:
-  - host:
+  - host: 
     http:
       paths:
-      - path: /elasticsearch(/|$)(.*)
+      - path: /es
         backend:
-          serviceName: elasticsearch-master-headless
+          serviceName: elasticsearch-es-http
           servicePort: 9200

@@ -7,14 +7,68 @@ spec:
     matchLabels:
       ms: celery-deployment
   replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: celery-deployment
   template:
     metadata:
       labels:
-        ms: celery-deployment
+        app.kubernetes.io/name: celery-deployment
     spec:
       containers:
       - name: celery-deployment
         image: alexeyebi/validation
+        env:
+          - name: FIRE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: fire_username
+          - name: FIRE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: fire_password
+          - name: TRACKHUBS_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: username
+          - name: TRACKHUBS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: password
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: secret_key
+          - name: SLACK_WEBHOOK
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: slack_webhook
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: access_key
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: secret_key
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-credentials
+                key: access_key
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-credentials
+                key: secret_key
         command: ['/bin/bash', 'run_celery.sh']
         env:
           - name: POSTGRES_USER

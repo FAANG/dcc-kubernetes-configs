@@ -8,7 +8,7 @@ spec:
     protocol: TCP
     targetPort: 8000
   selector:
-    ms: daphne-deployment
+    app.kubernetes.io/name: daphne-deployment
 
 ---
 
@@ -19,16 +19,16 @@ metadata:
 spec:
   selector:
     matchLabels:
-      ms: daphne-deployment
-  replicas: 3
+      app.kubernetes.io/name: daphne-deployment
+  replicas: 1
   template:
     metadata:
       labels:
-        ms: daphne-deployment
+        app.kubernetes.io/name: daphne-deployment
     spec:
       containers:
       - name: daphne-deployment
-        image: alexeyebi/validation
+        image: alexeyebi/validation 
         command: ['/bin/bash', 'run_daphne.sh']
         ports:
         - containerPort: 8000
@@ -83,6 +83,16 @@ spec:
               secretKeyRef:
                 name: postgres-credentials
                 key: bovreg_biosamples_password_prod
+          - name: TRACKHUBS_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: username
+          - name: TRACKHUBS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: password
           - name: ES_USER
             valueFrom:
               secretKeyRef:
@@ -100,6 +110,31 @@ spec:
                 key: secret_key
           - name: POSTGRES_HOST
             value: postgres-service
+          - name: SLACK_WEBHOOK
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: slack_webhook
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: access_key
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: secret_key
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-credentials
+                key: access_key
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-credentials
+                key: secret_key
         volumeMounts:
           - name: data
             mountPath: /data
