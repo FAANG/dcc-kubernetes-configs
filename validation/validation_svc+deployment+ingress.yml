@@ -12,12 +12,15 @@ spec:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: daphne-deployment
 spec:
-  replicas: 1
+  selector:
+    matchLabels:
+      ms: daphne-deployment
+  replicas: 3
   template:
     metadata:
       labels:
@@ -40,6 +43,61 @@ spec:
               secretKeyRef:
                 name: postgres-credentials
                 key: password
+          - name: FIRE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: fire_username
+          - name: FIRE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: fire_password
+          - name: BOVREG_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_ena_username
+          - name: BOVREG_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_ena_password
+          - name: BOVREG_BIOSAMPLES_USERNAME_TEST
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_username_test
+          - name: BOVREG_BIOSAMPLES_PASSWORD_TEST
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_password_test
+          - name: BOVREG_BIOSAMPLES_USERNAME_PROD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_username_prod
+          - name: BOVREG_BIOSAMPLES_PASSWORD_PROD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_password_prod
+          - name: ES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: es_user
+          - name: ES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: es_password
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: secret_key
           - name: POSTGRES_HOST
             value: postgres-service
         volumeMounts:
@@ -67,7 +125,7 @@ spec:
   tls:
   - hosts:
     - api.faang.org
-    secretName: tls-secret
+    secretName: tls-secret2
   rules:
   - host: api.faang.org
     http:

@@ -1,21 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: celery-deployment
+  name: flower
+  labels:
+    deployment: flower
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      ms: celery-deployment
-  replicas: 1
+      pod: celery-flower
   template:
     metadata:
       labels:
-        ms: celery-deployment
+        pod: celery-flower
     spec:
       containers:
-      - name: celery-deployment
+      - name: flower
         image: alexeyebi/validation
-        command: ['/bin/bash', 'run_celery.sh']
+        command: [ '/bin/bash', 'run_flower.sh' ]
+        ports:
+          - containerPort: 5555
         env:
           - name: POSTGRES_USER
             valueFrom:
@@ -74,27 +78,23 @@ spec:
                 key: secret_key
           - name: POSTGRES_HOST
             value: postgres-service
-        volumeMounts:
-          - name: data
-            mountPath: /data
+        resources:
+          limits:
+            cpu: 100m
       imagePullSecrets:
         - name: regcred
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: validation-pvc
 
+---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: flower-svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 5555
+  selector:
+    pod: celery-flower
