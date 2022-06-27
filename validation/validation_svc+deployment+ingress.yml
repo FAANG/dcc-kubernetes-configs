@@ -8,24 +8,27 @@ spec:
     protocol: TCP
     targetPort: 8000
   selector:
-    ms: daphne-deployment
+    app.kubernetes.io/name: daphne-deployment
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: daphne-deployment
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: daphne-deployment
   replicas: 1
   template:
     metadata:
       labels:
-        ms: daphne-deployment
+        app.kubernetes.io/name: daphne-deployment
     spec:
       containers:
       - name: daphne-deployment
-        image: alexeyebi/validation
+        image: alexeyebi/validation 
         command: ['/bin/bash', 'run_daphne.sh']
         ports:
         - containerPort: 8000
@@ -40,8 +43,98 @@ spec:
               secretKeyRef:
                 name: postgres-credentials
                 key: password
+          - name: FIRE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: fire_username
+          - name: FIRE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: fire_password
+          - name: BOVREG_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_ena_username
+          - name: BOVREG_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_ena_password
+          - name: BOVREG_BIOSAMPLES_USERNAME_TEST
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_username_test
+          - name: BOVREG_BIOSAMPLES_PASSWORD_TEST
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_password_test
+          - name: BOVREG_BIOSAMPLES_USERNAME_PROD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_username_prod
+          - name: BOVREG_BIOSAMPLES_PASSWORD_PROD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_password_prod
+          - name: TRACKHUBS_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: username
+          - name: TRACKHUBS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: password
+          - name: ES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: es_user
+          - name: ES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: es_password
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: secret_key
           - name: POSTGRES_HOST
             value: postgres-service
+          - name: SLACK_WEBHOOK
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: slack_webhook
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: access_key
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: secret_key
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-credentials
+                key: access_key
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-credentials
+                key: secret_key
         volumeMounts:
           - name: data
             mountPath: /data
