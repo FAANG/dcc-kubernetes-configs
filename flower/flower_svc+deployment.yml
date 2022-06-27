@@ -1,75 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: celery-deployment
+  name: flower
+  labels:
+    deployment: flower
 spec:
-  selector:
-    matchLabels:
-      ms: celery-deployment
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: celery-deployment
+      pod: celery-flower
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: celery-deployment
+        pod: celery-flower
     spec:
       containers:
-      - name: celery-deployment
+      - name: flower
         image: alexeyebi/validation
-        env:
-          - name: FIRE_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: fire_username
-          - name: FIRE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: fire_password
-          - name: TRACKHUBS_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: trackhubs-credentials
-                key: username
-          - name: TRACKHUBS_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: trackhubs-credentials
-                key: password
-          - name: SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: secret_key
-          - name: SLACK_WEBHOOK
-            valueFrom:
-              secretKeyRef:
-                name: trackhubs-credentials
-                key: slack_webhook
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-credentials
-                key: access_key
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-credentials
-                key: secret_key
-          - name: MINIO_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-credentials
-                key: access_key
-          - name: MINIO_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-credentials
-                key: secret_key
-        command: ['/bin/bash', 'run_celery.sh']
+        command: [ '/bin/bash', 'run_flower.sh' ]
+        ports:
+          - containerPort: 5555
         env:
           - name: POSTGRES_USER
             valueFrom:
@@ -128,27 +78,23 @@ spec:
                 key: secret_key
           - name: POSTGRES_HOST
             value: postgres-service
-        volumeMounts:
-          - name: data
-            mountPath: /data
+        resources:
+          limits:
+            cpu: 100m
       imagePullSecrets:
         - name: regcred
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: validation-pvc
 
+---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: flower-svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 5555
+  selector:
+    pod: celery-flower

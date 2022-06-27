@@ -12,11 +12,14 @@ spec:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: elixir-jsonschema-validator-deployment
 spec:
+  selector:
+    matchLabels:
+      ms: elixir-jsonschema-validator-deployment
   replicas: 1
   template:
     metadata:

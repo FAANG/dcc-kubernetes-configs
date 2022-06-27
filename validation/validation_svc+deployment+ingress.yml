@@ -160,7 +160,7 @@ spec:
   tls:
   - hosts:
     - api.faang.org
-    secretName: tls-secret
+    secretName: tls-secret2
   rules:
   - host: api.faang.org
     http:
