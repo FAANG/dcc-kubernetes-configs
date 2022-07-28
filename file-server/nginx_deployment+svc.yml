@@ -97,11 +97,15 @@ data:
           request_body = file:read("*a")
           sep = string.match(request_body, '([%s%S]-)\r')
           pathdata = {}
-          for str in string.gmatch(request_body, '\r\n\r([%s%S]-)\r--') do
+          for str in string.gmatch(request_body, sep..".-\n\r\n(.-)"..sep) do
               table.insert(pathdata, str)
           end
           path = string.gsub(pathdata[1], '^%s*(.-)%s*$', '%1');
-          filename = string.gsub(pathdata[2], '^%s*(.-)%s*$', '%1');
+          namedata = {}
+          for str in string.gmatch(request_body, sep.."\r.-\r\n\r.-\r"..sep.."\r.-\r\n\r(.-)\r"..sep) do
+              table.insert(namedata, str)
+          end
+          filename = string.gsub(namedata[1], '^%s*(.-)%s-%-$', '%1');
           data = {}
           for str in string.gmatch(request_body, sep.."\r.-\n\r\n(.-)"..sep) do
                 table.insert(data, str)
