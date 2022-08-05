@@ -4,7 +4,7 @@ metadata:
   name: query-svc
 spec:
   ports:
-  - port: 80
+  - port: 8000
   selector:
     app.kubernetes.io/name: query-back-end
 
@@ -26,11 +26,10 @@ spec:
     spec:
       containers:
       - name: query-back-end
-        image: aksh77/query:latest
+        image: eu.gcr.io/prj-ext-dev-faang-gcp-dr/dcc-query-api/query-api-embassy-cloud:latest
         imagePullPolicy: Always 
-        command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
         ports:
-        - containerPort: 80
+        - containerPort: 8000
         env:
         - name: ES_USER
           valueFrom:
