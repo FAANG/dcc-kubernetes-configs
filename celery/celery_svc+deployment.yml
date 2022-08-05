@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: celery-deployment
-        image: alexeyebi/validation
+        image: eu.gcr.io/prj-ext-dev-faang-gcp-dr/dcc-validate-metadata/backend-embassy-cloud:latest
         command: ['/bin/bash', 'run_celery.sh']
         env:
           - name: FIRE_USERNAME
@@ -80,16 +80,6 @@ spec:
               secretKeyRef:
                 name: postgres-credentials
                 key: password
-          - name: FIRE_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: fire_username
-          - name: FIRE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: fire_password
           - name: BOVREG_USERNAME
             valueFrom:
               secretKeyRef:
@@ -107,10 +97,11 @@ spec:
                 key: bovreg_biosamples_username_test
           - name: BOVREG_BIOSAMPLES_PASSWORD_TEST
             valueFrom:
+          - name: SECRET_KEY
+            valueFrom:
               secretKeyRef:
                 name: postgres-credentials
-                key: bovreg_biosamples_password_test
-          - name: BOVREG_BIOSAMPLES_USERNAME_PROD
+                key: secret_key
             valueFrom:
               secretKeyRef:
                 name: postgres-credentials
@@ -120,11 +111,6 @@ spec:
               secretKeyRef:
                 name: postgres-credentials
                 key: bovreg_biosamples_password_prod
-          - name: SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: secret_key
           - name: POSTGRES_HOST
             value: postgres-service
         volumeMounts:

@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: daphne-deployment
-        image: alexeyebi/validation 
+        image: eu.gcr.io/prj-ext-dev-faang-gcp-dr/dcc-validate-metadata/backend-embassy-cloud:latest 
         command: ['/bin/bash', 'run_daphne.sh']
         ports:
         - containerPort: 8000
