@@ -138,12 +138,17 @@ spec:
         volumeMounts:
           - name: data
             mountPath: /data
+          - name: files
+            mountPath: "/usr/share/nginx/html"
       imagePullSecrets:
         - name: regcred
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: validation-pvc
+        - name: files
+          persistentVolumeClaim:
+            claimName: local-storage-pvc
 
 ---
 
