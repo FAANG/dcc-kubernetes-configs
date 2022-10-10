@@ -1,0 +1,32 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-ontology
+spec:
+  schedule: "0 0 * * 1"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-ontology
+              image: aksh77/update-ontology:latest
+              env:
+              - name: FIRE_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-credentials
+                    key: fire_username
+
+              - name: FIRE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-credentials
+                    key: fire_password
+              imagePullPolicy: Always
+              command: ["python", "update.py"]
+          imagePullSecrets:
+            - name: regcred
+          restartPolicy: OnFailure 
