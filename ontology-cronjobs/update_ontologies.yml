@@ -1,0 +1,30 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-ontology
+spec:
+  schedule: "0 6 * * 1"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-ontology
+              image: aksh77/update-ontology:latest
+              imagePullPolicy: Always
+              command: ["./nextflow", "main.nf"]
+              ports:
+              - containerPort: 8000
+              volumeMounts:
+                - name: files
+                  mountPath: "/usr/share/nginx/html"
+          imagePullSecrets:
+            - name: regcred
+          volumes:
+            - name: files
+              persistentVolumeClaim:
+                claimName: local-storage-pvc
+          restartPolicy: OnFailure 
+      backoffLimit: 1
