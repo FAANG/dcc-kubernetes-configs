@@ -96,12 +96,12 @@ spec:
           - name: ES_USER
             valueFrom:
               secretKeyRef:
-                name: postgres-credentials
+                name: gcp-es-credentials
                 key: es_user
           - name: ES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: postgres-credentials
+                name: gcp-es-credentials
                 key: es_password
           - name: SECRET_KEY
             valueFrom:
