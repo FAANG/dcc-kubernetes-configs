@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: celery-deployment
-        image: eu.gcr.io/prj-ext-dev-faang-gcp-dr/dcc-validate-metadata/backend-embassy-cloud:latest
+        image: eu.gcr.io/prj-ext-prod-faang-gcp-dr/dcc-validate-metadata/backend-embassy-cloud:latest
         command: ['/bin/bash', 'run_celery.sh']
         env:
           - name: FIRE_USERNAME

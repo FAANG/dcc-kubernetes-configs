@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: query-back-end
-        image: eu.gcr.io/prj-ext-dev-faang-gcp-dr/dcc-query-api/query-api-embassy-cloud:latest
+        image: eu.gcr.io/prj-ext-prod-faang-gcp-dr/dcc-query-api/query-api-embassy-cloud:latest
         imagePullPolicy: Always 
         ports:
         - containerPort: 8000

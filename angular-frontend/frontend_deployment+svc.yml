@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: angular-frontend
-          image: eu.gcr.io/prj-ext-dev-faang-gcp-dr/dcc-portal-frontend/frontend-embassy-cloud:latest
+          image: eu.gcr.io/prj-ext-prod-faang-gcp-dr/dcc-portal-frontend/frontend-embassy-cloud:latest
           imagePullPolicy: Always
           ports:
           - containerPort: 80

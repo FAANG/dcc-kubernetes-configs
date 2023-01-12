@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: backend-deployment
-        image: eu.gcr.io/prj-ext-dev-faang-gcp-dr/dcc-validate-metadata/backend-embassy-cloud:latest 
+        image: eu.gcr.io/prj-ext-prod-faang-gcp-dr/dcc-validate-metadata/backend-embassy-cloud:latest 
         command: ['/bin/bash', 'run_uvicorn.sh']
         ports:
         - containerPort: 8000
