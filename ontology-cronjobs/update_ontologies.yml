@@ -17,6 +17,17 @@ spec:
               command: ["./nextflow", "main.nf"]
               ports:
               - containerPort: 8000
+              env:
+              - name: ES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: gcp-es-credentials
+                    key: es_user
+              - name: ES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: gcp-es-credentials
+                    key: es_password
               volumeMounts:
                 - name: files
                   mountPath: "/usr/share/nginx/html"
