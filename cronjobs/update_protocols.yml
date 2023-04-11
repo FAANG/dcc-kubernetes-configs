@@ -1,0 +1,34 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-protocols
+spec:
+  schedule: "0 7 * * 1"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-protocols
+              image: aksh77/update-protocols:latest
+              imagePullPolicy: Always
+              command: ["python", "create_protocols.py"]
+              ports:
+              - containerPort: 8000
+              env:
+              - name: ES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: gcp-es-credentials
+                    key: es_user
+              - name: ES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: gcp-es-credentials
+                    key: es_password
+          imagePullSecrets:
+            - name: regcred
+          restartPolicy: OnFailure
+      backoffLimit: 1
