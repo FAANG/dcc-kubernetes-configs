@@ -104,15 +104,15 @@ spec:
                 name: email-host-credentials
                 key: email_host_password
           - name: EMAIL_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: email-host-credentials
-                  key: email_host
+            valueFrom:
+              secretKeyRef:
+                name: email-host-credentials
+                key: email_host
           - name: EMAIL_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: email-host-credentials
-                  key: email_port
+            valueFrom:
+              secretKeyRef:
+                name: email-host-credentials
+                key: email_port
           - name: ES_USER
             valueFrom:
               secretKeyRef:
