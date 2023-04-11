@@ -93,6 +93,26 @@ spec:
               secretKeyRef:
                 name: trackhubs-credentials
                 key: password
+          - name: EMAIL_HOST_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: email-host-credentials
+                key: email_host_user
+          - name: EMAIL_HOST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: email-host-credentials
+                key: email_host_password
+          - name: EMAIL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: email-host-credentials
+                  key: email_host
+          - name: EMAIL_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: email-host-credentials
+                  key: email_port
           - name: ES_USER
             valueFrom:
               secretKeyRef:
