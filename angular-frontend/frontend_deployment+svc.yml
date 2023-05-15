@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
         - name: angular-frontend
-          image: eu.gcr.io/prj-ext-prod-faang-gcp-dr/dcc-portal-frontend/frontend-embassy-cloud:latest
+          image: eu.gcr.io/prj-ext-prod-faang-gcp-dr/dcc-portal-frontend/faang-frontend:latest
           imagePullPolicy: Always
           ports:
-          - containerPort: 80
+          - containerPort: 8080
 
 ---
 
@@ -27,8 +27,8 @@ metadata:
   name: angular-frontend-svc
 spec:
   ports:
-  - port: 80
+  - port: 8080
     protocol: TCP
-    targetPort: 80
+    targetPort: 8080
   selector:
     app.kubernetes.io/name: angular-frontend
